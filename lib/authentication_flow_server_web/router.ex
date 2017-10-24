@@ -6,6 +6,8 @@ defmodule AuthenticationFlowServerWeb.Router do
   end
 
   scope "/", AuthenticationFlowServerWeb do
+    pipe_through :api
 
+    resources "/sign_ups", SignUpController, only: [:create]
   end
 end
