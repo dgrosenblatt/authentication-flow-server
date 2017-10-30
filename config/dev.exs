@@ -55,3 +55,6 @@ config :authentication_flow_server, AuthenticationFlowServer.Repo,
   database: "authentication_flow_server_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :guardian, Guardian,
+  secret_key: "This is a secret key"

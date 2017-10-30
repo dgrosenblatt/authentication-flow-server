@@ -1,21 +1,14 @@
 defmodule AuthenticationFlowServerWeb.ErrorViewTest do
   use AuthenticationFlowServerWeb.ConnCase, async: true
-
-  # Bring render/3 and render_to_string/3 for testing custom views
   import Phoenix.View
+  alias AuthenticationFlowServer.Accounts.User
 
-  test "renders 404.html" do
-    assert render_to_string(AuthenticationFlowServerWeb.ErrorView, "404.html", []) ==
-           "Page not found"
-  end
-
-  test "render 500.html" do
-    assert render_to_string(AuthenticationFlowServerWeb.ErrorView, "500.html", []) ==
-           "Internal server error"
-  end
-
-  test "render any other" do
-    assert render_to_string(AuthenticationFlowServerWeb.ErrorView, "505.html", []) ==
-           "Internal server error"
+  test "renders 422.json" do
+    invalid_changeset = User.changeset(%User{}, %{})
+    assert %{errors: _} = render(
+      AuthenticationFlowServerWeb.ErrorView,
+      "422.json",
+      %{changeset: invalid_changeset}
+    )
   end
 end
