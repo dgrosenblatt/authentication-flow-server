@@ -17,7 +17,7 @@ config :authentication_flow_server, AuthenticationFlowServerWeb.Endpoint,
   load_from_system_env: true,
   url: [
     scheme: "https",
-    host: "https://authentication-flow-server.herokuapp.com/",
+    host: System.get_env("HOST_URL"),
     port: 443,
     force_ssl: [rewrite_on: [:x_forwarded_proto]]
   ],
