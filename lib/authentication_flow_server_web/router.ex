@@ -9,5 +9,6 @@ defmodule AuthenticationFlowServerWeb.Router do
     pipe_through :api
 
     resources "/users", UserController, only: [:create]
+    resources "/authentications", AuthenticationController, only: [:create]
   end
 end

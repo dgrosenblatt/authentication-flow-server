@@ -9,4 +9,16 @@ defmodule AuthenticationFlowServerWeb.ErrorController do
     |> put_status(:unprocessable_entity)
     |> render(ErrorView, "422.json")
   end
+
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:unauthorized)
+    |> render(ErrorView, "401.json")
+  end
+
+  def call(conn, _) do
+    conn
+    |> put_status(:internal_server_error)
+    |> render(ErrorView, "500.json")
+  end
 end
