@@ -54,3 +54,15 @@ Done!
   * Install dependencies with `$ mix deps.get`
   * Create and migrate your database with `$ mix ecto.create && mix ecto.migrate`
   * Start Phoenix endpoint with `$ mix phx.server`
+
+
+## Resetting a the database for a heroku app (that you own)
+
+  * Clone repo
+    * `$ git clone git@github.com:IntrepidPursuits/authentication_flow_server.git`
+  * Add your heroku app git url as a git remote
+    * `$ git remote add heroku <your app's Heroku Git URL, found in Settings => Info section>`
+
+  * Run db_reset script
+    * `$ cd authentication_flow_server`
+    * `$ ./bin/db_reset`

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+heroku restart
+
+if [ "$1" == "--confirm" ]; then
+  heroku pg:reset DATABASE --confirm $2
+else
+  heroku pg:reset DATABASE
+fi
+
+heroku run mix ecto.migrate
+heroku run mix run priv/repo/seeds.exs
