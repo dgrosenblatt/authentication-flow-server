@@ -10,7 +10,9 @@ Currently running at: https://authentication-flow-server.herokuapp.com/
 
 https://hexdocs.pm/phoenix/heroku.html
 
-(Most or all of the "Making our Project ready for Heroku" section will already be done)
+Most or all of the "Making our Project ready for Heroku" section will already be done.
+
+Note that all the config variables listed below in the "From the heroku dashboard" section will need to be added.
 
 #### From the heroku dashboard
 
@@ -23,6 +25,7 @@ Create and Configure a new heroku app
   * HOST_URL - read from the Domains and certificates section, under "Your app can be found at", will most likely be https://{name you chose when creating the app}.herokuapp.com
   * POOL_SIZE - 18
   * SECRET_KEY_BASE - a random string of ~50 characters (use a tool to generate this; it may yell at you for not being "random" enough)
+  * GUARDIAN_SECRET_KEY - another random string
 * Settings Tab => Buildpacks => Add buildpack => Enter Buildpack URL => https://github.com/HashNuke/heroku-buildpack-elixir.git
 
 Deploy from github via heroku integration
