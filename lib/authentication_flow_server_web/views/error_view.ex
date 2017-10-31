@@ -6,6 +6,14 @@ defmodule AuthenticationFlowServerWeb.ErrorView do
     %{errors: full_error_sentence(changeset)}
   end
 
+  def render("401.json", _conn) do
+    %{errors: "Unauthorized"}
+  end
+
+  def render("500.json", _conn) do
+    %{errors: "Internal server error"}
+  end
+
   defp full_error_sentence(%Changeset{errors: errors}) do
     errors
     |> error_list

@@ -20,6 +20,7 @@ defmodule AuthenticationFlowServerWeb.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import AuthenticationFlowServerWeb.Router.Helpers
+      import AuthenticationFlowServer.Factory
 
       # The default endpoint for testing
       @endpoint AuthenticationFlowServerWeb.Endpoint
