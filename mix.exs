@@ -20,7 +20,7 @@ defmodule AuthenticationFlowServer.Mixfile do
   def application do
     [
       mod: {AuthenticationFlowServer.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:ex_machina, :logger, :runtime_tools]
     ]
   end
 
@@ -33,14 +33,18 @@ defmodule AuthenticationFlowServer.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 0.12"},
+      {:comeonin, "~> 4.0.3"},
+      {:cowboy, "~> 1.0"},
+      {:ex_machina, "~> 2.0"},
+      {:gettext, "~> 0.11"},
+      {:guardian, "~> 0.14.5"},
       {:phoenix, "~> 1.3.0"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
-      {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"}
+      {:phoenix_live_reload, "~> 1.0", only: :dev}
     ]
   end
 

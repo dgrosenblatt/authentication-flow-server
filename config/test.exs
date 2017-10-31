@@ -12,8 +12,11 @@ config :logger, level: :warn
 # Configure your database
 config :authentication_flow_server, AuthenticationFlowServer.Repo,
   adapter: Ecto.Adapters.Postgres,
+  pool: Ecto.Adapters.SQL.Sandbox,
   username: "postgres",
   password: "postgres",
   database: "authentication_flow_server_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  hostname: "localhost"
+
+config :guardian, Guardian,
+  secret_key: "This is a secret key"

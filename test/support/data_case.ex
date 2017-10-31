@@ -21,6 +21,7 @@ defmodule AuthenticationFlowServer.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+      import AuthenticationFlowServer.Factory
       import AuthenticationFlowServer.DataCase
     end
   end
