@@ -1,6 +1,7 @@
 defmodule AuthenticationFlowServerWeb.GoogleAuthenticationController do
   use AuthenticationFlowServerWeb, :controller
   alias AuthenticationFlowServer.{Accounts, Accounts.GoogleSignIn}
+  alias AuthenticationFlowServerWeb.UserView
 
   action_fallback AuthenticationFlowServerWeb.ErrorController
 
@@ -14,7 +15,7 @@ defmodule AuthenticationFlowServerWeb.GoogleAuthenticationController do
       |> assign(:token, token)
       |> assign(:user, user)
       |> put_status(:created)
-      |> render("create.json")
+      |> render(UserView, "create.json")
     end
   end
 end

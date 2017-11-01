@@ -1,6 +1,7 @@
 defmodule AuthenticationFlowServerWeb.AuthenticationController do
   use AuthenticationFlowServerWeb, :controller
   alias AuthenticationFlowServer.Accounts
+  alias AuthenticationFlowServerWeb.UserView
 
   action_fallback AuthenticationFlowServerWeb.ErrorController
 
@@ -13,7 +14,7 @@ defmodule AuthenticationFlowServerWeb.AuthenticationController do
       |> assign(:token, token)
       |> assign(:user, user)
       |> put_status(:created)
-      |> render("create.json")
+      |> render(UserView, "create.json")
     end
   end
 end
