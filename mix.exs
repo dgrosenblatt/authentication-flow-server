@@ -20,7 +20,7 @@ defmodule AuthenticationFlowServer.Mixfile do
   def application do
     [
       mod: {AuthenticationFlowServer.Application, []},
-      extra_applications: [:ex_machina, :logger, :runtime_tools]
+      extra_applications: [:ex_machina, :logger, :runtime_tools, :httpoison, :poison]
     ]
   end
 
@@ -37,14 +37,19 @@ defmodule AuthenticationFlowServer.Mixfile do
       {:comeonin, "~> 4.0.3"},
       {:cowboy, "~> 1.0"},
       {:ex_machina, "~> 2.0"},
+      {:fastglobal, "~> 1.0"},
       {:gettext, "~> 0.11"},
       {:guardian, "~> 0.14.5"},
+      {:httpoison, "~> 0.10.0"},
+      {:joken, "~> 1.1"},
+      {:mock, "~> 0.2.0", only: :test},
       {:phoenix, "~> 1.3.0"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
-      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev}
+      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:postgrex, ">= 0.0.0"},
+      {:poison, "~> 2.0"}
     ]
   end
 
