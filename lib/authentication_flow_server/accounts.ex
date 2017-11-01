@@ -21,6 +21,22 @@ defmodule AuthenticationFlowServer.Accounts do
   end
 
   @doc """
+  Finds existing or creates a new user by email
+  """
+  def find_or_create_user_by_email(email) do
+    user = Repo.one(from u in User, where: [email: ^email])
+
+    case user do
+      %User{email: ^email} -> {:ok, user}
+      nil -> create_google_user(email)
+    end
+  end
+
+  defp create_google_user(email) do
+    create_user(%{"email" => email, "password" => ""})
+  end
+
+  @doc """
   Accepts email and password and returns user if password is correct
   """
   @spec authenticate_email_password(map) :: {:ok, User.t} | {:error, :unauthorized}
