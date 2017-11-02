@@ -1,12 +1,13 @@
-defmodule AuthenticationFlowServerWeb.AuthenticationController do
+defmodule AuthenticationFlowServerWeb.GoogleAuthenticationController do
   use AuthenticationFlowServerWeb, :controller
-  alias AuthenticationFlowServer.Accounts
+  alias AuthenticationFlowServer.{Accounts, Accounts.GoogleSignIn}
   alias AuthenticationFlowServerWeb.UserView
 
   action_fallback AuthenticationFlowServerWeb.ErrorController
 
-  def create(conn, %{"user" => user_params}) do
-    with {:ok, user} <- Accounts.authenticate_email_password(user_params),
+  def create(conn, %{"google_token" => google_token}) do
+    with {:ok, %{"email" => email, "sub" => _g_id}} <- GoogleSignIn.perform(google_token),
+         {:ok, user} <- Accounts.find_or_create_user_by_email(email),
          conn <- Guardian.Plug.api_sign_in(conn, user),
          token <- Guardian.Plug.current_token(conn) do
 
