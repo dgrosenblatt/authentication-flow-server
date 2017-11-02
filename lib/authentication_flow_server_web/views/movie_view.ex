@@ -3,11 +3,49 @@ defmodule AuthenticationFlowServerWeb.MovieView do
   alias AuthenticationFlowServer.MovieReviews.{Actor, Director, Movie, Review}
   alias AuthenticationFlowServer.Accounts.User
 
-  def render("index.json", %{movies: movies}) do
-    %{movies: render_movies(movies)}
+  @doc """
+  V1 of the API nests associated records
+  """
+  def render("index_v1.json", %{movies: movies}) do
+    %{movies: render_movies(movies, :v1)}
   end
 
-  def render("movie.json", %Movie{} = movie) do
+  @doc """
+  V2 of the API side-loads associated records
+  """
+  def render("index_v2.json", %{movies: movies}) do
+    directors =
+      movies
+      |> Stream.map(&(&1.director))
+      |> Stream.uniq()
+      |> Stream.map(&(render("director.json", &1)))
+      |> Enum.into([])
+
+    actors =
+      movies
+      |> Stream.flat_map(&(&1.actors))
+      |> Stream.uniq()
+      |> Stream.map(&(render("actor.json", &1)))
+      |> Enum.into([])
+
+    reviews_preloaded_users = Enum.flat_map(movies, &(&1.reviews))
+    reviews = Enum.map(reviews_preloaded_users, &(render("review_v2.json", &1)))
+
+    users =
+      reviews_preloaded_users
+      |> Stream.map(&(&1.user))
+      |> Stream.uniq()
+      |> Stream.map(&(render("user.json", &1)))
+      |> Enum.into([])
+
+    %{movies: render_movies(movies, :v2),
+      directors: directors,
+      actors: actors,
+      reviews: reviews,
+      users: users}
+  end
+
+  def render("movie_v1.json", %Movie{} = movie) do
     %{id: movie.id,
       inserted_at: movie.inserted_at,
       updated_at: movie.updated_at,
@@ -16,6 +54,20 @@ defmodule AuthenticationFlowServerWeb.MovieView do
       director: render("director.json", movie.director),
       actors: render_actors(movie.actors),
       reviews: render_reviews(movie.reviews)}
+  end
+
+  def render("movie_v2.json", %Movie{} = movie) do
+    actor_ids = Enum.map(movie.actors, &(&1.id))
+    review_ids = Enum.map(movie.reviews, &(&1.id))
+
+    %{id: movie.id,
+      inserted_at: movie.inserted_at,
+      updated_at: movie.updated_at,
+      name: movie.name,
+      release_date: movie.release_date,
+      director_id: movie.director_id,
+      actor_ids: actor_ids,
+      review_ids: review_ids}
   end
 
   def render("director.json", %Director{} = director) do
@@ -38,7 +90,16 @@ defmodule AuthenticationFlowServerWeb.MovieView do
       updated_at: review.updated_at,
       body: review.body,
       rating: review.rating,
-      reviewer: render("user.json", review.user)}
+      user: render("user.json", review.user)}
+  end
+
+  def render("review_v2.json", %Review{} = review) do
+    %{id: review.id,
+      inserted_at: review.inserted_at,
+      updated_at: review.updated_at,
+      body: review.body,
+      rating: review.rating,
+      user_id: review.user_id}
   end
 
   def render("user.json", %User{} = user) do
@@ -48,8 +109,12 @@ defmodule AuthenticationFlowServerWeb.MovieView do
       email: user.email}
   end
 
-  defp render_movies(movies) do
-    Enum.map(movies, &(render("movie.json", &1)))
+  defp render_movies(movies, :v1) do
+    Enum.map(movies, &(render("movie_v1.json", &1)))
+  end
+
+  defp render_movies(movies, :v2) do
+    Enum.map(movies, &(render("movie_v2.json", &1)))
   end
 
   defp render_actors(actors) do
