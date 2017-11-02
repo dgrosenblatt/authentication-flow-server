@@ -5,6 +5,7 @@ defmodule AuthenticationFlowServer.Accounts.User do
 
   use Ecto.Schema
   import Ecto.Changeset
+  alias AuthenticationFlowServer.MovieReviews.Review
 
   @type t :: %__MODULE__{
     id: String.t,
@@ -14,6 +15,7 @@ defmodule AuthenticationFlowServer.Accounts.User do
   schema "users" do
     field :email, :string
     field :encrypted_password, :string
+    has_many :reviews, Review
 
     timestamps()
   end
