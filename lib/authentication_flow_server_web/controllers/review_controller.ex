@@ -31,4 +31,17 @@ defmodule AuthenticationFlowServerWeb.ReviewController do
     |> assign(:reviews, reviews)
     |> render("index.json")
   end
+
+  def delete(conn, %{"id" => id}, current_user, _claims) do
+    with %Review{} = review <- Repo.get_by(Review, id: id, user_id: current_user.id),
+         {:ok, %Review{id: review_id}} <- MovieReviews.delete_review(review)
+    do
+      conn
+      |> put_resp_header("location", "#{review_id}")
+      |> put_resp_content_type("application/json")
+      |> send_resp(:no_content, "{}")
+    else
+      nil -> {:error, :not_found}
+    end
+  end
 end

@@ -28,4 +28,14 @@ defmodule AuthenticationFlowServer.MovieReviewsTest do
       } = review
     end
   end
+
+  describe "delete_review/1" do
+  @tag :current
+    test "deletes a Review" do
+      review = insert(:review)
+      MovieReviews.delete_review(review)
+      review_count = Repo.aggregate(Review, :count, :id)
+      assert review_count == 0
+    end
+  end
 end
