@@ -17,4 +17,10 @@ defmodule AuthenticationFlowServer.MovieReviews.Review do
     |> cast(attrs, [:rating, :body, :movie_id, :user_id])
     |> validate_required([:rating, :body, :movie_id, :user_id])
   end
+
+  def update_changeset(%__MODULE__{} = review, attrs) do
+    review
+    |> cast(attrs, [:rating, :body])
+    |> validate_required([:rating, :body, :movie_id, :user_id])
+  end
 end

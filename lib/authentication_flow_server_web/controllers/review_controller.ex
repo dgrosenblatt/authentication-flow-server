@@ -21,6 +21,18 @@ defmodule AuthenticationFlowServerWeb.ReviewController do
     end
   end
 
+  def update(conn, %{"id" => id, "review" => review_params}, current_user, _claims) do
+    with %Review{} = review <- Repo.get_by(Review, id: id, user_id: current_user.id),
+         {:ok, review} <- MovieReviews.update_review(review, review_params)
+    do
+      conn
+      |> assign(:review, review)
+      |> render("review.json")
+    else
+      nil -> {:error, :not_found}
+    end
+  end
+
   def index(conn, _params, current_user, _claims) do
     reviews =
       Review
@@ -30,6 +42,16 @@ defmodule AuthenticationFlowServerWeb.ReviewController do
     conn
     |> assign(:reviews, reviews)
     |> render("index.json")
+  end
+
+  def show(conn, %{"id" => id}, current_user, _claims) do
+    with %Review{} = review <- Repo.get_by(Review, id: id, user_id: current_user.id) do
+      conn
+      |> assign(:review, review)
+      |> render("review.json")
+    else
+      nil -> {:error, :not_found}
+    end
   end
 
   def delete(conn, %{"id" => id}, current_user, _claims) do

@@ -72,6 +72,79 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
     end
   end
 
+  describe "update/4" do
+    test "responds with JSON for a review", %{conn: conn} do
+      user = insert(:user)
+      review = insert(:review, user: user)
+      params = %{"review" => %{
+        "body" => "It actually wasn't that good", "rating" => 1}
+      }
+
+      conn =
+        conn
+        |> authorization_headers(user)
+        |> patch(review_path(conn, :update, review), params)
+
+      assert %{"review" => review_json} = json_response(conn, 200)
+      assert_json_paths_for_review(review_json)
+    end
+
+    test "responds with 404 Not Found if the user does not own the review", %{conn: conn} do
+      user = insert(:user)
+      review = insert(:review)
+
+      conn =
+        conn
+        |> authorization_headers(user)
+        |> patch(review_path(conn, :update, review), %{"review" => %{}})
+
+      assert %{"errors" => "Not found"} == json_response(conn, 404)
+    end
+
+    test "responds with 401 without a valid token", %{conn: conn} do
+      conn =
+        conn
+        |> accept_headers
+        |> patch(review_path(conn, :update, 1))
+      assert json_response(conn, 401)
+    end
+  end
+
+  describe "show/4" do
+    test "responds with JSON for a review", %{conn: conn} do
+      user = insert(:user)
+      review = insert(:review, user: user)
+
+      conn =
+        conn
+        |> authorization_headers(user)
+        |> get(review_path(conn, :show, review))
+
+      assert %{"review" => review_json} = json_response(conn, 200)
+      assert_json_paths_for_review(review_json)
+    end
+
+    test "responds with 404 Not Found if the user does not own the review", %{conn: conn} do
+      user = insert(:user)
+      review = insert(:review)
+
+      conn =
+        conn
+        |> authorization_headers(user)
+        |> get(review_path(conn, :show, review))
+
+      assert %{"errors" => "Not found"} == json_response(conn, 404)
+    end
+
+    test "responds with 401 without a valid token", %{conn: conn} do
+      conn =
+        conn
+        |> accept_headers
+        |> get(review_path(conn, :show, 1))
+      assert json_response(conn, 401)
+    end
+  end
+
   describe "destroy/4" do
     test "deletes a review and responds with 204 No Content", %{conn: conn} do
       user = insert(:user)

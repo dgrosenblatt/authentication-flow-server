@@ -30,12 +30,26 @@ defmodule AuthenticationFlowServer.MovieReviewsTest do
   end
 
   describe "delete_review/1" do
-  @tag :current
     test "deletes a Review" do
       review = insert(:review)
       MovieReviews.delete_review(review)
       review_count = Repo.aggregate(Review, :count, :id)
       assert review_count == 0
+    end
+  end
+
+  describe "update_review/2" do
+    test "updates a review" do
+      review = insert(:review)
+      new_body = "It actually wasn't great"
+      new_rating = 2
+      params = %{"body" => new_body, "rating" => new_rating}
+
+      {:ok, review} = MovieReviews.update_review(review, params)
+      assert %Review{
+        body: ^new_body,
+        rating: ^new_rating
+      } = review
     end
   end
 end
