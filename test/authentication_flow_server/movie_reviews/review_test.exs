@@ -18,9 +18,11 @@ defmodule AuthenticationFlowServer.MovieReviews.ReviewTest do
     end
 
     test "with missing required param" do
+      user = insert(:user)
+      movie = insert(:movie)
       params = %{
-        "user_id" => 0,
-        "movie_id" => 0,
+        "user_id" => user.id,
+        "movie_id" => movie.id,
         "body" => "",
         "rating" => ""
       }

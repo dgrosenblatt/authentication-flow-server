@@ -15,6 +15,8 @@ defmodule AuthenticationFlowServer.MovieReviews.Review do
   def changeset(%__MODULE__{} = review, attrs) do
     review
     |> cast(attrs, [:rating, :body, :movie_id, :user_id])
+    |> foreign_key_constraint(:movie_id)
+    |> foreign_key_constraint(:user_id)
     |> validate_required([:rating, :body, :movie_id, :user_id])
   end
 
