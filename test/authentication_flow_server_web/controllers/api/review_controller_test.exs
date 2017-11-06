@@ -10,21 +10,16 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
       params = %{"review" => %{
         "movie_id" => movie.id,
         "body" => "It was really good.",
-        "rating" => 10}}
+        "rating" => 10}
+      }
 
       conn =
         conn
         |> authorization_headers(user)
         |> post(review_path(conn, :create), params)
 
-      assert %{
-        "review" => %{
-          "user_id" => _,
-          "movie_id" => _,
-          "body" => _,
-          "rating" => _
-        }
-      } = json_response(conn, 201)
+      assert %{"review" => review_json} = json_response(conn, 201)
+      assert_json_paths_for_review(review_json)
     end
 
     test "responds with an error for invalid submissions", %{conn: conn} do
@@ -53,13 +48,19 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
     test "responds with JSON for all reviews the current user has created", %{conn: conn} do
       user = insert(:user)
       insert_list(3, :review, user: user)
+      _other_review = insert(:review)
 
       conn =
         conn
         |> authorization_headers(user)
         |> get(review_path(conn, :index))
 
-      assert json_response(conn, 200)
+      assert %{"reviews" => reviews_json} = json_response(conn, 200)
+      assert Enum.count(reviews_json) == 3
+
+      reviews_json
+      |> List.first
+      |> assert_json_paths_for_review
     end
 
     test "responds with a 401 without a valid token", %{conn: conn} do
@@ -105,5 +106,14 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
         |> delete(review_path(conn, :delete, 1))
       assert json_response(conn, 401)
     end
+  end
+
+  defp assert_json_paths_for_review(review) do
+    assert %{
+      "user_id" => _,
+      "movie_id" => _,
+      "body" => _,
+      "rating" => _
+    } = review
   end
 end
