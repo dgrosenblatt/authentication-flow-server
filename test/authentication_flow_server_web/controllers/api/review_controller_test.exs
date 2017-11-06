@@ -47,4 +47,26 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
       assert %{"errors" => ["Unauthenticated"]} == json_response(conn, 401)
     end
   end
+
+  describe "index/4" do
+    test "responds with JSON for all reviews the current user has created", %{conn: conn} do
+      user = insert(:user)
+      insert_list(3, :review, user: user)
+
+      conn =
+        conn
+        |> authorization_headers(user)
+        |> get(review_path(conn, :index))
+
+      assert json_response(conn, 200)
+    end
+
+    test "responds with a 401 without a valid token", %{conn: conn} do
+      conn =
+        conn
+        |> accept_headers
+        |> get(review_path(conn, :index))
+      assert %{"errors" => ["Unauthenticated"]} == json_response(conn, 401)
+    end
+  end
 end

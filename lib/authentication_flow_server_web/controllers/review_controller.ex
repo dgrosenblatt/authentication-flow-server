@@ -1,7 +1,8 @@
 defmodule AuthenticationFlowServerWeb.ReviewController do
   use AuthenticationFlowServerWeb, :controller
   use Guardian.Phoenix.Controller
-  alias AuthenticationFlowServer.{Repo, MovieReviews, MovieReviews.Movie}
+  import Ecto.Query
+  alias AuthenticationFlowServer.{Repo, MovieReviews, MovieReviews.Movie, MovieReviews.Review}
   plug Guardian.Plug.EnsureAuthenticated
   action_fallback AuthenticationFlowServerWeb.ErrorController
 
@@ -18,5 +19,16 @@ defmodule AuthenticationFlowServerWeb.ReviewController do
       nil -> {:error, :not_found}
       {:error, changeset} -> {:error, changeset}
     end
+  end
+
+  def index(conn, _params, current_user, _claims) do
+    reviews =
+      Review
+      |> where(user_id: ^current_user.id)
+      |> Repo.all
+
+    conn
+    |> assign(:reviews, reviews)
+    |> render("index.json")
   end
 end
