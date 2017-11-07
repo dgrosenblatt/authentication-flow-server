@@ -10,6 +10,10 @@ defmodule AuthenticationFlowServerWeb.ErrorView do
     %{errors: "Unauthorized"}
   end
 
+  def render("403.json", _conn) do
+    %{errors: "Forbidden"}
+  end
+
   def render("404.json", _conn) do
     %{errors: "Not found"}
   end

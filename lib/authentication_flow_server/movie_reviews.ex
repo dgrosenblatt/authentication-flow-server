@@ -24,9 +24,10 @@ defmodule AuthenticationFlowServer.MovieReviews do
   end
 
   def get_review_by_id_for_user(id, %User{id: user_id}) do
-    case Review.Query.get_by_id_for_user(id, user_id) do
+    case Repo.get(Review, id) do
+      %Review{user_id: ^user_id} = review -> {:ok, review}
+      %Review{} -> {:error, :forbidden}
       nil -> {:error, :not_found}
-      review -> {:ok, review}
     end
   end
 end

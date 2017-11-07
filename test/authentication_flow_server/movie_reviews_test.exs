@@ -88,5 +88,12 @@ defmodule AuthenticationFlowServer.MovieReviewsTest do
       user = %User{id: 1}
       assert {:error, :not_found} = MovieReviews.get_review_by_id_for_user(1, user)
     end
+
+    test "returns an error if review found but not owned by user" do
+      user = insert(:user)
+      review = insert(:review)
+      assert {:error, :forbidden} =
+        MovieReviews.get_review_by_id_for_user(review.id, user)
+    end
   end
 end

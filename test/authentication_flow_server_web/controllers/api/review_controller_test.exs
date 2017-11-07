@@ -89,7 +89,7 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
       assert_json_paths_for_review(review_json)
     end
 
-    test "responds with 404 Not Found if the user does not own the review", %{conn: conn} do
+    test "responds with 403 Forbidden if the user does not own the review", %{conn: conn} do
       user = insert(:user)
       review = insert(:review)
 
@@ -98,7 +98,7 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
         |> authorization_headers(user)
         |> patch(review_path(conn, :update, review), %{"review" => %{}})
 
-      assert %{"errors" => "Not found"} == json_response(conn, 404)
+      assert %{"errors" => "Forbidden"} == json_response(conn, 403)
     end
 
     test "responds with 401 without a valid token", %{conn: conn} do
@@ -124,7 +124,7 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
       assert_json_paths_for_review(review_json)
     end
 
-    test "responds with 404 Not Found if the user does not own the review", %{conn: conn} do
+    test "responds with 403 Forbidden if the user does not own the review", %{conn: conn} do
       user = insert(:user)
       review = insert(:review)
 
@@ -133,7 +133,7 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
         |> authorization_headers(user)
         |> get(review_path(conn, :show, review))
 
-      assert %{"errors" => "Not found"} == json_response(conn, 404)
+      assert %{"errors" => "Forbidden"} == json_response(conn, 403)
     end
 
     test "responds with 401 without a valid token", %{conn: conn} do
@@ -145,7 +145,7 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
     end
   end
 
-  describe "destroy/4" do
+  describe "delete/4" do
     test "deletes a review and responds with 204 No Content", %{conn: conn} do
       user = insert(:user)
       review = insert(:review, user: user)
@@ -160,7 +160,7 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
       assert review_count == 0
     end
 
-    test "responds with 404 Not Found if the user does not own the review", %{conn: conn} do
+    test "responds with 403 Forbidden if the user does not own the review", %{conn: conn} do
       user = insert(:user)
       review = insert(:review)
 
@@ -169,7 +169,7 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
         |> authorization_headers(user)
         |> delete(review_path(conn, :delete, review))
 
-      assert %{"errors" => "Not found"} == json_response(conn, 404)
+      assert %{"errors" => "Forbidden"} == json_response(conn, 403)
     end
 
     test "responds with 401 without a valid token", %{conn: conn} do

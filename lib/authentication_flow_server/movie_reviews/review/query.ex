@@ -8,9 +8,4 @@ defmodule AuthenticationFlowServer.MovieReviews.Review.Query do
     |> where(user_id: ^user_id)
     |> Repo.all
   end
-
-  def get_by_id_for_user(id, user_id) do
-    Review
-    |> Repo.get_by(id: id, user_id: user_id)
-  end
 end
