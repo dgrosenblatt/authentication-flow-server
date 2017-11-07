@@ -23,6 +23,7 @@ defmodule AuthenticationFlowServerWeb.Router do
     pipe_through :api_auth
 
     resources "/movies", MovieController, only: [:index]
+    resources "/reviews", ReviewController, only: [:create, :update, :index, :show, :delete]
   end
 
   scope "/v2", AuthenticationFlowServerWeb do
