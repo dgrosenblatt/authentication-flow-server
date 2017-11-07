@@ -183,8 +183,8 @@ defmodule AuthenticationFlowServerWeb.ReviewControllerTest do
 
   defp assert_json_paths_for_review(review) do
     assert %{
-      "user_id" => _,
-      "movie_id" => _,
+      "user" => %{"email" => _},
+      "movie" => %{"name" => _, "release_date" => _},
       "body" => _,
       "rating" => _
     } = review

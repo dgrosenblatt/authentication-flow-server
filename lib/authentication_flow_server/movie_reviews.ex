@@ -28,4 +28,8 @@ defmodule AuthenticationFlowServer.MovieReviews do
       nil -> {:error, :not_found}
     end
   end
+
+  def preload_review(reviews, assocs \\ [:user, :movie]) do
+    Repo.preload(reviews, assocs)
+  end
 end

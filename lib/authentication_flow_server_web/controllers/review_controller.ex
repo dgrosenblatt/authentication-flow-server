@@ -8,27 +8,32 @@ defmodule AuthenticationFlowServerWeb.ReviewController do
 
   def create(conn, %{"review" => review_params}, current_user, _claims) do
     with user_review_params <- Map.put(review_params, "user_id", current_user.id),
-         {:ok, review} <- MovieReviews.create_review(user_review_params)
+         {:ok, review} <- MovieReviews.create_review(user_review_params),
+         preloaded_review <- MovieReviews.preload_review(review)
     do
       conn
-      |> assign(:review, review)
+      |> assign(:review, preloaded_review)
       |> put_status(:created)
-      |> render("review.json")
+      |> render("create.json")
     end
   end
 
   def update(conn, %{"id" => id, "review" => review_params}, current_user, _claims) do
     with {:ok, review} <- MovieReviews.get_review_by_id_for_user(id, current_user),
-         {:ok, updated_review} <- MovieReviews.update_review(review, review_params)
+         {:ok, updated_review} <- MovieReviews.update_review(review, review_params),
+         preloaded_review <- MovieReviews.preload_review(updated_review)
     do
       conn
-      |> assign(:review, updated_review)
-      |> render("review.json")
+      |> assign(:review, preloaded_review)
+      |> render("update.json")
     end
   end
 
   def index(conn, _params, current_user, _claims) do
-    reviews = MovieReviews.all_reviews_for_user(current_user)
+    reviews =
+      current_user
+      |> MovieReviews.all_reviews_for_user
+      |> MovieReviews.preload_review
 
     conn
     |> assign(:reviews, reviews)
@@ -36,10 +41,12 @@ defmodule AuthenticationFlowServerWeb.ReviewController do
   end
 
   def show(conn, %{"id" => id}, current_user, _claims) do
-    with {:ok, review} <- MovieReviews.get_review_by_id_for_user(id, current_user) do
+    with {:ok, review} <- MovieReviews.get_review_by_id_for_user(id, current_user),
+         preloaded_review <- MovieReviews.preload_review(review)
+    do
       conn
-      |> assign(:review, review)
-      |> render("review.json")
+      |> assign(:review, preloaded_review)
+      |> render("show.json")
     end
   end
 
