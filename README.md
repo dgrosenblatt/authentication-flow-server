@@ -8,6 +8,7 @@ Currently running at: https://authentication-flow-server.herokuapp.com/
 
 #### From the command line via the Heroku CLI:
 
+https://devcenter.heroku.com/articles/heroku-cli#macos
 https://hexdocs.pm/phoenix/heroku.html
 
 Most or all of the "Making our Project ready for Heroku" section will already be done.
@@ -55,12 +56,13 @@ Done!
   * `$ git clone git@github.com:IntrepidPursuits/authentication_flow_server.git`
   * `$ cd authentication_flow_server`
   * Install dependencies with `$ mix deps.get`
-  * Create and migrate your database with `$ mix ecto.create && mix ecto.migrate`
+  * Create, migrate, and seed database with `$ mix ecto.create && mix ecto.migrate && mix run priv/repo/seeds.exs`
   * Start Phoenix endpoint with `$ mix phx.server`
 
 
 ## Resetting a the database for a heroku app (that you own)
 
+  * Install the Heroku CLI - https://devcenter.heroku.com/articles/heroku-cli#macos
   * Clone repo
     * `$ git clone git@github.com:IntrepidPursuits/authentication_flow_server.git`
   * Add your heroku app git url as a git remote
