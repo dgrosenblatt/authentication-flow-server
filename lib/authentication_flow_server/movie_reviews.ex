@@ -9,9 +9,7 @@ defmodule AuthenticationFlowServer.MovieReviews do
     |> Repo.insert()
   end
 
-  def delete_review(%Review{} = review) do
-    Repo.delete(review)
-  end
+  def delete_review(%Review{} = review), do: Repo.delete(review)
 
   def update_review(%Review{} = review, attrs \\ %{}) do
     review

@@ -18,24 +18,24 @@ defmodule AuthenticationFlowServerWeb.MovieView do
       movies
       |> Stream.map(&(&1.director))
       |> Stream.uniq()
-      |> Stream.map(&(render("director.json", &1)))
+      |> Stream.map(&render("director.json", &1))
       |> Enum.into([])
 
     actors =
       movies
       |> Stream.flat_map(&(&1.actors))
       |> Stream.uniq()
-      |> Stream.map(&(render("actor.json", &1)))
+      |> Stream.map(&render("actor.json", &1))
       |> Enum.into([])
 
     reviews_preloaded_users = Enum.flat_map(movies, &(&1.reviews))
-    reviews = Enum.map(reviews_preloaded_users, &(render("review_v2.json", &1)))
+    reviews = Enum.map(reviews_preloaded_users, &render("review_v2.json", &1))
 
     users =
       reviews_preloaded_users
       |> Stream.map(&(&1.user))
       |> Stream.uniq()
-      |> Stream.map(&(render("user.json", &1)))
+      |> Stream.map(&render("user.json", &1))
       |> Enum.into([])
 
     %{movies: render_movies(movies, :v2),
@@ -110,18 +110,18 @@ defmodule AuthenticationFlowServerWeb.MovieView do
   end
 
   defp render_movies(movies, :v1) do
-    Enum.map(movies, &(render("movie_v1.json", &1)))
+    Enum.map(movies, &render("movie_v1.json", &1))
   end
 
   defp render_movies(movies, :v2) do
-    Enum.map(movies, &(render("movie_v2.json", &1)))
+    Enum.map(movies, &render("movie_v2.json", &1))
   end
 
   defp render_actors(actors) do
-    Enum.map(actors, &(render("actor.json", &1)))
+    Enum.map(actors, &render("actor.json", &1))
   end
 
   defp render_reviews(reviews) do
-    Enum.map(reviews, &(render("review.json", &1)))
+    Enum.map(reviews, &render("review.json", &1))
   end
 end

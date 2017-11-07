@@ -20,6 +20,6 @@ defmodule AuthenticationFlowServerWeb.ReviewView do
   end
 
   defp render_reviews(reviews) do
-    Enum.map(reviews, &(render_review(&1)))
+    Enum.map(reviews, &render_review(&1))
   end
 end
