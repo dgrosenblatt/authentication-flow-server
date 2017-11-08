@@ -24,9 +24,10 @@ Create and Configure a new heroku app
 * Settings Tab => Config Variables => Reveal Config Vars, add the following:
   * (DATABASE_URL should already be populated from the postgres add-on)
   * HOST_URL - read from the Domains and certificates section, under "Your app can be found at", will most likely be https://{name you chose when creating the app}.herokuapp.com
-  * POOL_SIZE - 18
+  * POOL_SIZE - 10
   * SECRET_KEY_BASE - a random string of ~50 characters (use a tool to generate this; it may yell at you for not being "random" enough)
   * GUARDIAN_SECRET_KEY - another random string
+  * GOOGLE_CLIENT_ID - Google project Client ID associated with your iOS app's Bundle ID (create a project and credentials for an OAuth client ID on https://console.developers.google.com)
 * Settings Tab => Buildpacks => Add buildpack => Enter Buildpack URL => https://github.com/HashNuke/heroku-buildpack-elixir.git
 
 Deploy from github via heroku integration
