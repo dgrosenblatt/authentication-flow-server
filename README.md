@@ -28,6 +28,7 @@ Create and Configure a new heroku app
   * SECRET_KEY_BASE - a random string of ~50 characters (use a tool to generate this; it may yell at you for not being "random" enough)
   * GUARDIAN_SECRET_KEY - another random string
   * GOOGLE_CLIENT_ID - Google project Client ID associated with your iOS app's Bundle ID (create a project and credentials for an OAuth client ID on https://console.developers.google.com)
+  * IOS_APP_URL_IDENTIFIER - This will be used for intercepting deep link urls for password resets, for example `my-ios-app://password_reset?token=abc123`
 * Settings Tab => Buildpacks => Add buildpack => Enter Buildpack URL => https://github.com/HashNuke/heroku-buildpack-elixir.git
 
 Deploy from github via heroku integration

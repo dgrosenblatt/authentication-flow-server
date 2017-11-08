@@ -16,6 +16,7 @@ defmodule AuthenticationFlowServerWeb.Router do
     resources "/users", UserController, only: [:create]
     resources "/authentications/google", GoogleAuthenticationController, only: [:create]
     resources "/authentications", AuthenticationController, only: [:create]
+    resources "/password_resets", PasswordResetController, only: [:create]
   end
 
   scope "/v1", AuthenticationFlowServerWeb do

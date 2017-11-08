@@ -34,6 +34,7 @@ defmodule AuthenticationFlowServer.Mixfile do
   defp deps do
     [
       {:bcrypt_elixir, "~> 0.12"},
+      {:calendar, "~> 0.17.4"},
       {:comeonin, "~> 4.0.3"},
       {:cowboy, "~> 1.0"},
       {:ex_machina, "~> 2.0"},

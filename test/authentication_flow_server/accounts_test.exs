@@ -1,6 +1,8 @@
 defmodule AuthenticationFlowServer.AccountsTest do
   use AuthenticationFlowServer.DataCase
-  alias AuthenticationFlowServer.{Accounts, Accounts.User}
+  alias AuthenticationFlowServer.{Accounts, Accounts.User, Accounts.PasswordReset}
+  alias Calendar.DateTime
+  alias Ecto.Changeset
 
   @password "password1"
   @encrypted_password Comeonin.Bcrypt.hashpwsalt(@password)
@@ -58,6 +60,29 @@ defmodule AuthenticationFlowServer.AccountsTest do
 
       assert {:error, :unauthorized} =
         Accounts.authenticate_email_password(%{"email" => "ex@mp.le", "password" => "wrongpass"})
+    end
+  end
+
+  describe "create_password_reset/1" do
+    test "persists and returns a password reset with a future expiration date" do
+      user = insert(:user)
+
+      assert {:ok, %PasswordReset{
+        token: token,
+        user_id: user_id,
+        redeemed_at: nil,
+        expired_at: expired_at}
+      } = Accounts.create_password_reset(user.email)
+
+      {:ok, expired_at_dt} = DateTime.from_naive(expired_at, "Etc/UTC")
+      assert DateTime.after?(expired_at_dt, DateTime.now_utc())
+      assert user_id == user.id
+      refute is_nil(token)
+      assert Repo.aggregate(PasswordReset, :count, :id) == 1
+    end
+
+    test "returns an error if no user is associated with the provided email" do
+      assert {:error, %Changeset{}} = Accounts.create_password_reset("fake@dmail.io")
     end
   end
 end

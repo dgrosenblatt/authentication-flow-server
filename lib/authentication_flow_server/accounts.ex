@@ -1,8 +1,11 @@
 defmodule AuthenticationFlowServer.Accounts do
   import Ecto.Query
   alias AuthenticationFlowServer.Repo
-  alias AuthenticationFlowServer.Accounts.User
+  alias AuthenticationFlowServer.Accounts.{PasswordReset, User}
+  alias Calendar.DateTime
   alias Comeonin.Bcrypt
+
+  @password_reset_expiration_seconds 3600
 
   @doc """
   Accepts a user email and password map, hashes the password, and inserts user
@@ -47,5 +50,22 @@ defmodule AuthenticationFlowServer.Accounts do
       {:ok, user} -> {:ok, user}
       {:error, _} -> {:error, :unauthorized}
     end
+  end
+
+  def create_password_reset(email) do
+    user_id =
+      from(u in User, select: u.id, where: u.email == ^email)
+      |> Repo.one
+
+    new_password_reset_attrs = %{
+      user_id: user_id,
+      token: Ecto.UUID.generate(),
+      redeemed_at: nil,
+      expired_at: DateTime.add!(DateTime.now_utc(), @password_reset_expiration_seconds)
+    }
+
+    %PasswordReset{}
+    |> PasswordReset.changeset(new_password_reset_attrs)
+    |> Repo.insert
   end
 end
