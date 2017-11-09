@@ -33,4 +33,8 @@ defmodule AuthenticationFlowServerWeb.Router do
 
     resources "/movies", MovieController, only: [:index]
   end
+
+  if Mix.env == :dev do
+    forward "/send_emails", Bamboo.EmailPreviewPlug
+  end
 end

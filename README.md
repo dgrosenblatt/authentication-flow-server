@@ -20,22 +20,30 @@ Note that all the config variables listed below in the "From the heroku dashboar
 Create and Configure a new heroku app
 
 * Create a new app - New => Create New app
-* Resources Tab => Add-ons => Add Heroku Postgres (hobby/free should be sufficient)
-* Settings Tab => Config Variables => Reveal Config Vars, add the following:
-  * (DATABASE_URL should already be populated from the postgres add-on)
-  * HOST_URL - read from the Domains and certificates section, under "Your app can be found at", will most likely be https://{name you chose when creating the app}.herokuapp.com
-  * POOL_SIZE - 10
-  * SECRET_KEY_BASE - a random string of ~50 characters (use a tool to generate this; it may yell at you for not being "random" enough)
-  * GUARDIAN_SECRET_KEY - another random string
-  * GOOGLE_CLIENT_ID - Google project Client ID associated with your iOS app's Bundle ID (create a project and credentials for an OAuth client ID on https://console.developers.google.com)
-  * IOS_APP_URL_IDENTIFIER - This will be used for intercepting deep link urls for password resets, for example `my-ios-app://password_reset?token=abc123`
-* Settings Tab => Buildpacks => Add buildpack => Enter Buildpack URL => https://github.com/HashNuke/heroku-buildpack-elixir.git
+
+* Resources Tab
+  * Add-ons => Add Heroku Postgres (hobby/free should be sufficient)
+  * Add-ons => Add SendGrid (starter/free) and follow docs to create a new API key https://devcenter.heroku.com/articles/sendgrid#obtaining-an-api-key
+
+
+* Settings Tab
+  * Buildpacks => Add buildpack => Enter Buildpack URL => https://github.com/HashNuke/heroku-buildpack-elixir.git
+  * Config Variables => Reveal Config Vars, add the following:
+    * (DATABASE_URL, SENDGRID_USERNAME, and SENDGRID_PASSWORD should already be populated from the add-ons)
+    * SENDGRID_API_KEY - the api key created when provisioning SendGrid add-on
+    * SENDER_EMAIL - an email address password reset emails will be sent from
+    * IOS_APP_URL_IDENTIFIER - This will be used for deep link urls for password resets, for example `my-ios-app:password_reset?token=abc123`
+    * HOST_URL - read from the Domains and certificates section, under "Your app can be found at", will most likely be https://{name you chose when creating the app}.herokuapp.com
+    * POOL_SIZE - 10
+    * SECRET_KEY_BASE - a random string of ~50 characters (use a tool to generate this; it may yell at you for not being "random" enough)
+    * GUARDIAN_SECRET_KEY - another random string
+    * GOOGLE_CLIENT_ID - Google project Client ID associated with your iOS app's Bundle ID (create a project and credentials for an OAuth client ID on https://console.developers.google.com)
 
 Deploy from github via heroku integration
 
 * Deploy Tab => Deployment Method => Select GitHub
   * Connect to GitHub => Select IntrepidPursuits, repo-name enter authentication_flow_server, Search, click Connect
-  * Manual deploy => master should be selected by default, click Deploy Branch
+  * Manual deploy => master should be selected by default, click Deploy Branch. This will deploy the codebase from github, run migrations, and seed the database.
 
 Done!
 
