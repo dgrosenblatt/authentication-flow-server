@@ -17,6 +17,16 @@ config :authentication_flow_server, AuthenticationFlowServerWeb.Endpoint,
   pubsub: [name: AuthenticationFlowServer.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :authentication_flow_server, AuthenticationFlowServer.Mailer,
+  adapter: Bamboo.SendgridAdapter,
+  api_key: System.get_env("SENDGRID_API_KEY")
+
+config :authentication_flow_server,
+  ios_app_url_identifier: System.get_env("IOS_APP_URL_IDENTIFIER")
+
+config :authentication_flow_server,
+  sender_email: System.get_env("SENDER_EMAIL")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

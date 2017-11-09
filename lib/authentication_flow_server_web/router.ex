@@ -16,6 +16,7 @@ defmodule AuthenticationFlowServerWeb.Router do
     resources "/users", UserController, only: [:create]
     resources "/authentications/google", GoogleAuthenticationController, only: [:create]
     resources "/authentications", AuthenticationController, only: [:create]
+    resources "/password_resets", PasswordResetController, only: [:create]
   end
 
   scope "/v1", AuthenticationFlowServerWeb do
@@ -31,5 +32,9 @@ defmodule AuthenticationFlowServerWeb.Router do
     pipe_through :api_auth
 
     resources "/movies", MovieController, only: [:index]
+  end
+
+  if Mix.env == :dev do
+    forward "/send_emails", Bamboo.EmailPreviewPlug
   end
 end
