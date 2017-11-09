@@ -52,20 +52,24 @@ defmodule AuthenticationFlowServer.Accounts do
     end
   end
 
-  def create_password_reset(email) do
-    user_id =
-      from(u in User, select: u.id, where: u.email == ^email)
-      |> Repo.one
-
-    new_password_reset_attrs = %{
-      user_id: user_id,
-      token: Ecto.UUID.generate(),
-      redeemed_at: nil,
-      expired_at: DateTime.add!(DateTime.now_utc(), @password_reset_expiration_seconds)
-    }
-
+  def create_password_reset(password_reset_params) do
     %PasswordReset{}
-    |> PasswordReset.changeset(new_password_reset_attrs)
+    |> PasswordReset.changeset(password_reset_params)
     |> Repo.insert
+  end
+
+  def build_password_reset(email_address) do
+    user_id = Repo.one(from u in User, select: u.id, where: u.email == ^email_address)
+
+    case user_id do
+      nil ->
+        {:error, :not_found}
+      id ->
+        token = Ecto.UUID.generate()
+        expiration =
+          DateTime.add!(DateTime.now_utc(), @password_reset_expiration_seconds)
+
+        {:ok, %{user_id: id, token: token, redeemed_at: nil, expired_at: expiration}}
+    end
   end
 end

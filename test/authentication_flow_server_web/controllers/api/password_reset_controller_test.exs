@@ -30,7 +30,7 @@ defmodule AuthenticationFlowServerWeb.PasswordResetControllerTest do
         |> accept_headers
         |> post(password_reset_path(conn, :create), params)
 
-      assert %{"errors" => "User_id not found for that email"} = json_response(conn, 422)
+      assert %{"errors" => "Not found"} = json_response(conn, 404)
     end
   end
 end

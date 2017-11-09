@@ -16,7 +16,6 @@ defmodule AuthenticationFlowServer.Accounts.PasswordReset do
     password_reset
     |> cast(attrs, [:token, :expired_at, :redeemed_at, :user_id])
     |> foreign_key_constraint(:user_id)
-    |> validate_required([:token, :expired_at])
-    |> validate_required(:user_id, message: "not found for that email")
+    |> validate_required([:expired_at, :token, :user_id])
   end
 end

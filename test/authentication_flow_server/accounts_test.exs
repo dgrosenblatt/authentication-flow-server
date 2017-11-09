@@ -2,7 +2,6 @@ defmodule AuthenticationFlowServer.AccountsTest do
   use AuthenticationFlowServer.DataCase
   alias AuthenticationFlowServer.{Accounts, Accounts.User, Accounts.PasswordReset}
   alias Calendar.DateTime
-  alias Ecto.Changeset
 
   @password "password1"
   @encrypted_password Comeonin.Bcrypt.hashpwsalt(@password)
@@ -64,25 +63,36 @@ defmodule AuthenticationFlowServer.AccountsTest do
   end
 
   describe "create_password_reset/1" do
-    test "persists and returns a password reset with a future expiration date" do
+    test "persists and returns a password reset" do
       user = insert(:user)
+      params = %{user_id: user.id, token: "abc", expired_at: DateTime.now_utc(),
+        redeemed_at: nil}
 
-      assert {:ok, %PasswordReset{
+      assert {:ok, %PasswordReset{}} = Accounts.create_password_reset(params)
+      assert Repo.aggregate(PasswordReset, :count, :id) == 1
+    end
+  end
+
+  describe "build_password_reset/1" do
+    test "assembles attributes for a password reset when the provided email is associated with a user" do
+      email = "test@email.com"
+      user = insert(:user, email: email)
+
+      assert {:ok, %{
         token: token,
         user_id: user_id,
         redeemed_at: nil,
         expired_at: expired_at}
-      } = Accounts.create_password_reset(user.email)
+      } = Accounts.build_password_reset(email)
 
       {:ok, expired_at_dt} = DateTime.from_naive(expired_at, "Etc/UTC")
       assert DateTime.after?(expired_at_dt, DateTime.now_utc())
       assert user_id == user.id
       refute is_nil(token)
-      assert Repo.aggregate(PasswordReset, :count, :id) == 1
     end
 
-    test "returns an error if no user is associated with the provided email" do
-      assert {:error, %Changeset{}} = Accounts.create_password_reset("fake@dmail.io")
+    test "returns an error when provided an unknown email" do
+      assert {:error, :not_found} = Accounts.build_password_reset("fake@email.com")
     end
   end
 end

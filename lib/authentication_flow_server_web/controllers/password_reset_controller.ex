@@ -5,7 +5,9 @@ defmodule AuthenticationFlowServerWeb.PasswordResetController do
   action_fallback AuthenticationFlowServerWeb.ErrorController
 
   def create(conn, %{"email" => email}) do
-    with {:ok, password_reset} <- Accounts.create_password_reset(email) do
+    with {:ok, attrs} <- Accounts.build_password_reset(email),
+         {:ok, password_reset} <- Accounts.create_password_reset(attrs)
+    do
       password_reset
       |> PasswordResetEmail.create_email(email)
       |> Mailer.deliver_later
