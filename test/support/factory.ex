@@ -1,7 +1,8 @@
 defmodule AuthenticationFlowServer.Factory do
   use ExMachina.Ecto, repo: AuthenticationFlowServer.Repo
-  alias AuthenticationFlowServer.Accounts.User
+  alias AuthenticationFlowServer.Accounts.{PasswordReset, User}
   alias AuthenticationFlowServer.MovieReviews.{Actor, Director, Movie, Review, Role}
+  alias Calendar.DateTime
 
   def user_factory do
     %User{
@@ -36,6 +37,15 @@ defmodule AuthenticationFlowServer.Factory do
       movie: build(:movie),
       rating: 10,
       body: "It was really good"
+    }
+  end
+
+  def password_reset_factory do
+    %PasswordReset{
+      user: build(:user),
+      expired_at: DateTime.add!(DateTime.now_utc(), 300),
+      redeemed_at: nil,
+      token: "abc-123"
     }
   end
 end

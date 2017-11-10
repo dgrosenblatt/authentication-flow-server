@@ -10,6 +10,20 @@ defmodule AuthenticationFlowServerWeb.ErrorController do
     |> render(ErrorView, "422.json")
   end
 
+  def call(conn, {:error, :password_reset_token_expired}) do
+    conn
+    |> assign(:message, "Token has expired")
+    |> put_status(:unprocessable_entity)
+    |> render(ErrorView, "422.json")
+  end
+
+  def call(conn, {:error, :password_reset_token_redeemed}) do
+    conn
+    |> assign(:message, "Token was already redeemed")
+    |> put_status(:unprocessable_entity)
+    |> render(ErrorView, "422.json")
+  end
+
   def call(conn, {:error, :unauthorized}) do
     conn
     |> put_status(:unauthorized)

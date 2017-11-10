@@ -22,6 +22,10 @@ defmodule AuthenticationFlowServerWeb.ErrorView do
     %{errors: full_error_sentence(changeset)}
   end
 
+  def render("422.json", %{message: message}) do
+    %{errors: message}
+  end
+
   def render("500.json", _conn) do
     %{errors: "Internal server error"}
   end
