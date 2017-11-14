@@ -97,7 +97,6 @@ defmodule AuthenticationFlowServer.AccountsTest do
   end
 
   describe "reset_user_password/2" do
-    @tag :current
     test "updates a user's password" do
       token = "abc-123"
       user = insert(:user, encrypted_password: @encrypted_password)
@@ -109,7 +108,6 @@ defmodule AuthenticationFlowServer.AccountsTest do
       refute encrypted_password == @encrypted_password
     end
 
-    @tag :current
     test "returns an error when the token is invalid" do
       assert {:error, _} = Accounts.reset_user_password("faketoken", "new-password-1234")
     end
