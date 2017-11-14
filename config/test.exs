@@ -20,9 +20,3 @@ config :authentication_flow_server, AuthenticationFlowServer.Repo,
 
 config :guardian, Guardian,
   secret_key: "This is a secret key"
-
-config :authentication_flow_server, AuthenticationFlowServer.Mailer,
-  adapter: Bamboo.TestAdapter
-
-config :authentication_flow_server,
-  sender_email: "test@email.com"

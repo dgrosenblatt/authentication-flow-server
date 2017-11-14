@@ -58,6 +58,3 @@ config :authentication_flow_server, AuthenticationFlowServer.Repo,
 
 config :guardian, Guardian,
   secret_key: "This is a secret key"
-
-config :authentication_flow_server, AuthenticationFlowServer.Mailer,
-  adapter: Bamboo.LocalAdapter

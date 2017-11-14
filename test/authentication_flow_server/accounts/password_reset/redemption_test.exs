@@ -7,7 +7,6 @@ defmodule AuthenticationFlowServer.Accounts.PasswordReset.RedemptionTest do
   @hour_ago DateTime.subtract!(DateTime.now_utc(), 3600)
 
   describe "redeem_with_token/1" do
-    @tag :current
     test "returns a password reset and sets redeemed at to the current time" do
       token = "abc-123"
       password_reset_id = insert(:password_reset, token: token, redeemed_at: nil).id
@@ -20,12 +19,10 @@ defmodule AuthenticationFlowServer.Accounts.PasswordReset.RedemptionTest do
       refute is_nil(redeemed_at)
     end
 
-    @tag :current
     test "returns an error when no PasswordReset is associated with the token" do
       assert {:error, :not_found} = Redemption.redeem_with_token("fake-token")
     end
 
-    @tag :current
     test "returns an error when the PasswordReset is expired" do
       token = "abc-123"
       insert(:password_reset,
@@ -34,7 +31,6 @@ defmodule AuthenticationFlowServer.Accounts.PasswordReset.RedemptionTest do
       assert {:error, :password_reset_token_expired} = Redemption.redeem_with_token(token)
     end
 
-    @tag :current
     test "returns an error when the Password reset is redeemed" do
       token = "abc-123"
       insert(:password_reset,

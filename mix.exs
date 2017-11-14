@@ -21,7 +21,6 @@ defmodule AuthenticationFlowServer.Mixfile do
     [
       mod: {AuthenticationFlowServer.Application, []},
       extra_applications: [
-        :bamboo,
         :ex_machina,
         :logger,
         :runtime_tools,
@@ -39,7 +38,6 @@ defmodule AuthenticationFlowServer.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bamboo, "~> 0.8.0"},
       {:bcrypt_elixir, "~> 0.12"},
       {:calendar, "~> 0.17.4"},
       {:comeonin, "~> 4.0.3"},

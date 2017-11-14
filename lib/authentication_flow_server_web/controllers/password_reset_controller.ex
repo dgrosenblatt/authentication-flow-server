@@ -1,6 +1,6 @@
 defmodule AuthenticationFlowServerWeb.PasswordResetController do
   use AuthenticationFlowServerWeb, :controller
-  alias AuthenticationFlowServer.{Accounts, Accounts.PasswordResetEmail, Mailer}
+  alias AuthenticationFlowServer.{Accounts, Mail.SendgridMailer}
 
   action_fallback AuthenticationFlowServerWeb.ErrorController
 
@@ -8,9 +8,7 @@ defmodule AuthenticationFlowServerWeb.PasswordResetController do
     with {:ok, attrs} <- Accounts.build_password_reset(email),
          {:ok, password_reset} <- Accounts.create_password_reset(attrs)
     do
-      password_reset
-      |> PasswordResetEmail.create_email(email)
-      |> Mailer.deliver_later
+      SendgridMailer.deliver_later(:password_reset_created, email, password_reset.token)
 
       conn
       |> put_resp_content_type("application/json")
