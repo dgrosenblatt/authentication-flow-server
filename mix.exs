@@ -5,7 +5,7 @@ defmodule AuthenticationFlowServer.Mixfile do
     [
       app: :authentication_flow_server,
       version: "0.0.1",
-      elixir: "~> 1.4",
+      elixir: "~> 1.5.0",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -42,11 +42,13 @@ defmodule AuthenticationFlowServer.Mixfile do
       {:calendar, "~> 0.17.4"},
       {:comeonin, "~> 4.0.3"},
       {:cowboy, "~> 1.0"},
+      {:ex_aws, "~> 2.0.1"},
+      {:ex_aws_s3, "~> 2.0.0"},
       {:ex_machina, "~> 2.0"},
       {:fastglobal, "~> 1.0"},
       {:gettext, "~> 0.11"},
       {:guardian, "~> 0.14.5"},
-      {:httpoison, "~> 0.10.0"},
+      {:httpoison, "~> 0.13.0"},
       {:joken, "~> 1.1"},
       {:mock, "~> 0.2.0", only: :test},
       {:phoenix, "~> 1.3.0"},
@@ -55,7 +57,8 @@ defmodule AuthenticationFlowServer.Mixfile do
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:postgrex, ">= 0.0.0"},
-      {:poison, "~> 2.0"}
+      {:poison, "~> 2.0"},
+      {:sweet_xml, "~> 0.6.5"}
     ]
   end
 
