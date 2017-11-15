@@ -22,4 +22,7 @@ defmodule AuthenticationFlowServer.S3Object do
 
   def presigned_put(object_key),
     do: S3.presigned_url(@config, :put, @bucket, object_key)
+
+  def presigned_get(object_key),
+    do: S3.presigned_url(@config, :get, @bucket, object_key)
 end
