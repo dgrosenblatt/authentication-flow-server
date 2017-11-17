@@ -27,6 +27,7 @@ defmodule AuthenticationFlowServerWeb.Router do
     resources "/movies", MovieController, only: [:index]
     resources "/reviews", ReviewController, only: [:create, :update, :index, :show, :delete]
     resources "/s3_objects", S3ObjectController, only: [:create]
+    resources "/images", ImageController, only: [:create, :index]
   end
 
   scope "/v2", AuthenticationFlowServerWeb do
